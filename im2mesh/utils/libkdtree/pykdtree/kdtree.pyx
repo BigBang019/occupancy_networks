@@ -21,46 +21,47 @@ from libc.stdint cimport uint32_t, int8_t, uint8_t
 cimport cython
 
 
-# Node structure
-cdef struct node_float:
-    float cut_val
-    int8_t cut_dim
-    uint32_t start_idx
-    uint32_t n
-    float cut_bounds_lv
-    float cut_bounds_hv
-    node_float *left_child
-    node_float *right_child
+cdef extern from "kd_tree.h":
+    # Node structure
+    cdef struct Node_float:
+        float cut_val
+        int8_t cut_dim
+        uint32_t start_idx
+        uint32_t n
+        float cut_bounds_lv
+        float cut_bounds_hv
+        Node_float *left_child
+        Node_float *right_child
 
-cdef struct tree_float:
-    float *bbox
-    int8_t no_dims
-    uint32_t *pidx
-    node_float *root
+    cdef struct Tree_float:
+        float *bbox
+        int8_t no_dims
+        uint32_t *pidx
+        Node_float *root
 
-cdef struct node_double:
-    double cut_val
-    int8_t cut_dim
-    uint32_t start_idx
-    uint32_t n
-    double cut_bounds_lv
-    double cut_bounds_hv
-    node_double *left_child
-    node_double *right_child
+    cdef struct Node_double:
+        double cut_val
+        int8_t cut_dim
+        uint32_t start_idx
+        uint32_t n
+        double cut_bounds_lv
+        double cut_bounds_hv
+        Node_double *left_child
+        Node_double *right_child
 
-cdef struct tree_double:
-    double *bbox
-    int8_t no_dims
-    uint32_t *pidx
-    node_double *root
+    cdef struct Tree_double:
+        double *bbox
+        int8_t no_dims
+        uint32_t *pidx
+        Node_double *root
+    
+    Tree_float* construct_tree_float(float *pa, int8_t no_dims, uint32_t n, uint32_t bsp) nogil
+    void search_tree_float(Tree_float *kdtree, float *pa, float *point_coords, uint32_t num_points, uint32_t k, float distance_upper_bound, float eps_fac, uint8_t *mask, uint32_t *closest_idxs, float *closest_dists) nogil
+    void delete_tree_float(Tree_float *kdtree)
 
-cdef extern tree_float* construct_tree_float(float *pa, int8_t no_dims, uint32_t n, uint32_t bsp) nogil
-cdef extern void search_tree_float(tree_float *kdtree, float *pa, float *point_coords, uint32_t num_points, uint32_t k, float distance_upper_bound, float eps_fac, uint8_t *mask, uint32_t *closest_idxs, float *closest_dists) nogil
-cdef extern void delete_tree_float(tree_float *kdtree)
-
-cdef extern tree_double* construct_tree_double(double *pa, int8_t no_dims, uint32_t n, uint32_t bsp) nogil
-cdef extern void search_tree_double(tree_double *kdtree, double *pa, double *point_coords, uint32_t num_points, uint32_t k, double distance_upper_bound, double eps_fac, uint8_t *mask, uint32_t *closest_idxs, double *closest_dists) nogil
-cdef extern void delete_tree_double(tree_double *kdtree)
+    Tree_double* construct_tree_double(double *pa, int8_t no_dims, uint32_t n, uint32_t bsp) nogil
+    void search_tree_double(Tree_double *kdtree, double *pa, double *point_coords, uint32_t num_points, uint32_t k, double distance_upper_bound, double eps_fac, uint8_t *mask, uint32_t *closest_idxs, double *closest_dists) nogil
+    void delete_tree_double(Tree_double *kdtree)
 
 cdef class KDTree:
     """kd-tree for fast nearest-neighbour lookup.
@@ -74,8 +75,8 @@ cdef class KDTree:
         Maximum number of data points in tree leaf
     """
 
-    cdef tree_float *_kdtree_float
-    cdef tree_double *_kdtree_double
+    cdef Tree_float *_kdtree_float
+    cdef Tree_double *_kdtree_double
     cdef readonly np.ndarray data_pts
     cdef readonly np.ndarray data
     cdef float *_data_pts_data_float

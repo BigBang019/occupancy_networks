@@ -74,10 +74,10 @@ void print_tree_${DTYPE}(Node_${DTYPE} *root, int level);
 ${DTYPE} calc_dist_${DTYPE}(${DTYPE} *point1_coord, ${DTYPE} *point2_coord, int8_t no_dims);
 ${DTYPE} get_cube_offset_${DTYPE}(int8_t dim, ${DTYPE} *point_coord, ${DTYPE} *bbox);
 ${DTYPE} get_min_dist_${DTYPE}(${DTYPE} *point_coord, int8_t no_dims, ${DTYPE} *bbox);
-void search_leaf_${DTYPE}(${DTYPE} *restrict pa, uint32_t *restrict pidx, int8_t no_dims, uint32_t start_idx, uint32_t n, ${DTYPE} *restrict point_coord,
-                 uint32_t k, uint32_t *restrict closest_idx, ${DTYPE} *restrict closest_dist);
-void search_leaf_${DTYPE}_mask(${DTYPE} *restrict pa, uint32_t *restrict pidx, int8_t no_dims, uint32_t start_idx, uint32_t n, ${DTYPE} *restrict point_coord,
-                 uint32_t k, uint8_t *restrict mask, uint32_t *restrict closest_idx, ${DTYPE} *restrict closest_dist);
+void search_leaf_${DTYPE}(${DTYPE} *__restrict__ pa, uint32_t *__restrict__ pidx, int8_t no_dims, uint32_t start_idx, uint32_t n, ${DTYPE} *__restrict__ point_coord,
+                 uint32_t k, uint32_t *__restrict__ closest_idx, ${DTYPE} *__restrict__ closest_dist);
+void search_leaf_${DTYPE}_mask(${DTYPE} *__restrict__ pa, uint32_t *__restrict__ pidx, int8_t no_dims, uint32_t start_idx, uint32_t n, ${DTYPE} *__restrict__ point_coord,
+                 uint32_t k, uint8_t *__restrict__ mask, uint32_t *__restrict__ closest_idx, ${DTYPE} *__restrict__ closest_dist);
 void search_splitnode_${DTYPE}(Node_${DTYPE} *root, ${DTYPE} *pa, uint32_t *pidx, int8_t no_dims, ${DTYPE} *point_coord,
                       ${DTYPE} min_dist, uint32_t k, ${DTYPE} distance_upper_bound, ${DTYPE} eps_fac, uint8_t *mask, uint32_t *  closest_idx, ${DTYPE} *closest_dist);
 void search_tree_${DTYPE}(Tree_${DTYPE} *tree, ${DTYPE} *pa, ${DTYPE} *point_coords,
@@ -526,8 +526,8 @@ Params:
     closest_idx : index of closest data point found (return)
     closest_dist : distance to closest point (return)
 ************************************************/
-void search_leaf_${DTYPE}(${DTYPE} *restrict pa, uint32_t *restrict pidx, int8_t no_dims, uint32_t start_idx, uint32_t n, ${DTYPE} *restrict point_coord,
-                 uint32_t k, uint32_t *restrict closest_idx, ${DTYPE} *restrict closest_dist)
+void search_leaf_${DTYPE}(${DTYPE} *__restrict__ pa, uint32_t *__restrict__ pidx, int8_t no_dims, uint32_t start_idx, uint32_t n, ${DTYPE} *__restrict__ point_coord,
+                 uint32_t k, uint32_t *__restrict__ closest_idx, ${DTYPE} *__restrict__ closest_dist)
 {
     ${DTYPE} cur_dist;
     uint32_t i;
@@ -558,8 +558,8 @@ Params:
     closest_idx : index of closest data point found (return)
     closest_dist : distance to closest point (return)
 ************************************************/
-void search_leaf_${DTYPE}_mask(${DTYPE} *restrict pa, uint32_t *restrict pidx, int8_t no_dims, uint32_t start_idx, uint32_t n, ${DTYPE} *restrict point_coord,
-                               uint32_t k, uint8_t *mask, uint32_t *restrict closest_idx, ${DTYPE} *restrict closest_dist)
+void search_leaf_${DTYPE}_mask(${DTYPE} *__restrict__ pa, uint32_t *__restrict__ pidx, int8_t no_dims, uint32_t start_idx, uint32_t n, ${DTYPE} *__restrict__ point_coord,
+                               uint32_t k, uint8_t *mask, uint32_t *__restrict__ closest_idx, ${DTYPE} *__restrict__ closest_dist)
 {
     ${DTYPE} cur_dist;
     uint32_t i;
